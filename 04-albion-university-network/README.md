@@ -8,12 +8,12 @@ This was one of my larger Packet Tracer labs, so I used it to practice putting d
 
 ![Network Topology](images/topology.png)
 
-The network has:
+The network includes:
 
 - Main Campus
 - Smaller Branch Campus
 - Multiple buildings and departments
-- VLANs for separate departments
+- Separate VLANs for departments and faculties
 - Layer 3 switching
 - Internal web and FTP servers
 - External email server
@@ -80,7 +80,7 @@ The router-to-router links use /30 networks.
 
 ## VLAN Configuration
 
-VLANs were created to keep the different departments on separate networks while allowing them to share the network infrastructure.
+VLANs were created to keep the different departments on separate networks while allowing them to share the same network infrastructure.
 
 The main campus Layer 3 switch handles the VLANs for the different departments.
 
@@ -90,9 +90,7 @@ The main campus Layer 3 switch handles the VLANs for the different departments.
 
 ## Routing - RIPv2
 
-RIPv2 was used for routing between the internal routers.
-
-The main campus router and branch router exchange their network information using RIP, allowing devices on different networks to communicate.
+RIPv2 was used to exchange routes between the main campus and branch router, allowing the different campus networks to communicate.
 
 I checked the routing table and RIP configuration using Cisco IOS commands.
 
