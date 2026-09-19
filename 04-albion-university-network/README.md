@@ -1,65 +1,85 @@
 # Albion University Network
 
-A Cisco Packet Tracer project based on a university network with two campuses, multiple buildings, separate departments, VLANs, internal servers, DHCP and RIPv2 routing.
+A Cisco Packet Tracer project based on a university network with two campuses, multiple buildings, different departments, VLANs, servers, DHCP and RIPv2.
 
-This was one of my larger Packet Tracer labs, so I used it to practice putting different networking concepts together instead of configuring them separately.
+I built this project to practice putting different networking concepts together in one topology instead of doing small labs for each topic separately.
+
+---
 
 ## Topology
 
 ![Network Topology](images/topology.png)
 
-The network includes:
+The network is divided into three main parts:
 
-- Main Campus
-- Smaller Branch Campus
-- Multiple buildings and departments
-- Separate VLANs for departments and faculties
-- Layer 3 switching
-- Internal web and FTP servers
-- External email server
-- RIPv2 routing
-- Router-based DHCP
+- Albion Main Campus
+- Health & Sciences Branch Campus
+- External Cloud Network
+
+There are three routers in the topology:
+
+- Main Campus Router
+- Branch Router
+- Cloud Router
+
+The main campus also uses a Layer 3 switch to connect the different buildings and departments.
 
 ---
 
-## Network Layout
+## Main Campus
 
-### Main Campus
+The main campus has three buildings.
 
-The main campus is divided into three buildings.
+### Building A
 
-**Building A**
 - Admin
 - HR
 - Finance
 - Business
 
-**Building B**
+### Building B
+
 - Engineering & Computing
 - Art & Design
 
-**Building C**
+### Building C
+
 - Student Lab
 - IT Department
 - Web Server
 - FTP Server
 
-### Branch Campus
+Each department is kept on a separate VLAN and IP network.
 
-The smaller campus contains:
+---
+
+## Branch Campus
+
+The smaller campus contains the Health & Sciences faculty.
+
+It has:
 
 - Staff network
-- Student Lab
+- Student Lab network
 
-The branch campus is connected to the main campus through a router.
+The branch is connected to the main campus through the Branch Router.
 
-There is also an external cloud network containing an email server.
+---
+
+## External Network
+
+The external part of the topology contains:
+
+- Cloud Router
+- Email Server
+
+The Cloud Router connects the external network to the Main Campus Router.
 
 ---
 
 ## VLAN & IP Addressing
 
-Each department/faculty is kept on a separate VLAN and IP network.
+Each department/faculty has its own VLAN and IP network.
 
 | Department | VLAN | Network |
 |---|---:|---|
@@ -74,31 +94,58 @@ Each department/faculty is kept on a separate VLAN and IP network.
 | Staff | 90 | 192.168.9.0/24 |
 | Branch Student Lab | 100 | 192.168.10.0/24 |
 
-The router-to-router links use /30 networks.
-
 ---
 
-## VLAN Configuration
+## Router-to-Router Networks
 
-VLANs were created to keep the different departments on separate networks while allowing them to share the same network infrastructure.
+The routers are connected using `/30` networks.
 
-The main campus Layer 3 switch handles the VLANs for the different departments.
+| Connection | Network |
+|---|---|
+| Main Campus Router ↔ Branch Router | 10.10.10.0/30 |
+| Cloud Router ↔ Main Campus Router | 10.10.10.4/30 |
+| Cloud Router ↔ Email Server | 20.0.0.0/30 |
 
-![VLAN Verification](images/vlan-verification.png)
-
----
-
-## Routing - RIPv2
-
-RIPv2 was used to exchange routes between the main campus and branch router, allowing the different campus networks to communicate.
-
-I checked the routing table and RIP configuration using Cisco IOS commands.
-
-![RIP Verification](images/rip-verification.png)
-
-### Routing commands used
+The basic router layout is:
 
 ```text
+Email Server
+     |
+20.0.0.0/30
+     |
+Cloud Router
+     |
+10.10.10.4/30
+     |
+Main Campus Router
+     |
+10.10.10.0/30
+     |
+Branch Router
+
+
+
+```
+---
+
+## Server Connectivity
+
+The IT department contains the internal Web Server and FTP Server.
+
+I tested connectivity to the servers from other networks to make sure the routing was working correctly.
+
+![Server Connectivity](images/server-connectivity.png)
+
+---
+
+## Network Verification
+
+Some of the Cisco IOS commands I used while checking the network were:
+
+```text
+show vlan brief
 show ip route
 show ip protocols
 show ip interface brief
+show ip dhcp binding
+show ip dhcp pool
