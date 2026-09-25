@@ -1,9 +1,8 @@
-
 # Enterprise Banking Network
 
-A Cisco Packet Tracer project based on a banking and insurance company network. The company has a four-floor office building, with different departments on each floor.
+A Cisco Packet Tracer project based on an enterprise banking and insurance company network. The company has a four-floor building with different departments, separate VLANs, wireless networks, servers and inter-floor routing.
 
-I designed and configured the network to practice VLANs, subnetting, OSPF routing, DHCP, wireless networking, server connectivity and basic network security.
+I built this project to practice designing and configuring a larger enterprise network using VLANs, subnetting, OSPF, DHCP, wireless networking and basic network security.
 
 I also created a network design model using Microsoft Visio before implementing the topology in Cisco Packet Tracer.
 
@@ -11,53 +10,54 @@ I also created a network design model using Microsoft Visio before implementing 
 
 ## Project Overview
 
-The network is divided into four floors, with each floor having its own departments and network devices.
+The network is designed for a company with four floors.
 
-Each floor contains:
+Each floor contains different departments, and every department has its own VLAN and subnet. The network includes wired and wireless users, printers, servers and routers connecting the floors.
 
-- Department-specific VLANs
-- Switches for connecting end devices
+The project includes:
+
+- Four-floor enterprise network
+- Department-based VLANs
+- IPv4 subnetting
+- OSPF routing
+- Inter-VLAN routing
+- DHCP server
+- HTTP server
+- Email server
 - Wireless access points
-- PCs and printers
-- A Layer 3 switch
-- A router for communication with other floors
-
-The fourth floor also contains the server room, which includes DHCP, HTTP and Email servers.
+- SSH configuration
+- Switch port security
+- Network verification and connectivity testing
 
 ---
 
-## Network Design Model
+## Network Design
 
-Before implementing the network in Cisco Packet Tracer, I created a network design model using Microsoft Visio.
+The network design was first planned using Microsoft Visio and then implemented in Cisco Packet Tracer.
 
-The Visio model was used to visualize the network structure, connections between floors and the overall layout of the enterprise network.
+### Visio Network Model
 
-> Add your Visio design image to the `images` folder and update the image name below.
+The Visio model was used to visualize the network structure, departments, routers, switches and connections before creating the Packet Tracer topology.
 
-![Visio Network Design](images/visio-network-design.png)
+<!-- Add your Visio model image here if you upload it -->
+<!-- ![Visio Network Model](images/visio-model.png) -->
 
----
-
-## Network Topology
-
-The complete network was implemented in Cisco Packet Tracer.
-
-The topology contains four routers, Layer 3 switches, access switches, wireless access points, end devices and servers.
+### Cisco Packet Tracer Topology
 
 ![Network Topology](images/topology.png)
 
-### Floor Distribution
+The topology contains four floors:
 
-| Floor | Departments |
-|---|---|
-| First Floor | Management, Research, Human Resource |
-| Second Floor | Marketing, Accounting, Finance |
-| Third Floor | Logistics and Store, Customer Care, Guest Area |
-| Fourth Floor | Administration, ICT, Server Room |
+- First Floor
+- Second Floor
+- Third Floor
+- Fourth Floor
+
+Each floor has its own router and switches. The routers are connected using point-to-point /30 networks.
 
 ---
 
-## Department Details
+## Departments and Devices
 
 ### First Floor
 
@@ -89,7 +89,7 @@ The topology contains four routers, Layer 3 switches, access switches, wireless 
 |---|---:|---:|
 | Administration | 20 | 2 |
 | ICT | 20 | 2 |
-| Server Room | 2 Admin PCs | — |
+| Server Room | 2 Admin PCs | Servers |
 
 The server room contains:
 
@@ -99,275 +99,32 @@ The server room contains:
 
 ---
 
-## VLAN and IP Addressing
+## VLAN Configuration
 
-Each department is assigned a separate VLAN and subnet.
+Each department is assigned a separate VLAN and IP subnet.
 
-The network uses the `192.168.10.0` address space as the base network. Subnetting was performed according to the number of devices required in each department.
+| Department | VLAN | Network |
+|---|---:|---|
+| Management | 10 | 192.168.10.0/26 |
+| Research | 20 | 192.168.10.64/26 |
+| Human Resource | 30 | 192.168.10.128/26 |
+| Marketing | 40 | 192.168.10.192/26 |
+| Accounting | 50 | 192.168.11.0/26 |
+| Finance | 60 | 192.168.11.64/26 |
+| Logistics | 70 | 192.168.11.128/26 |
+| Customer Care | 80 | 192.168.11.192/26 |
+| Guest | 90 | 192.168.12.0/26 |
+| Administration | 100 | 192.168.12.64/26 |
+| ICT | 110 | 192.168.12.128/26 |
+| Server Room | 120 | 192.168.12.192/26 |
 
-The VLANs used in the project include:
-
-| Department | VLAN |
-|---|---:|
-| Management | 10 |
-| Research | 20 |
-| Human Resource | 30 |
-| Marketing | 40 |
-| Accounting | 50 |
-| Finance | 60 |
-| Logistics and Store | 70 |
-| Customer Care | 80 |
-| Guest Area | 90 |
-| Administration | 100 |
-| ICT | 110 |
-| Server Room | 120 |
-
-The subnets were configured using `/26` networks for the departmental networks.
-
-![IP Addressing](images/ip-addressing.png)
+Each VLAN uses a separate subnet to divide the departments and manage network communication.
 
 ---
 
-## Routing - OSPF
+## IP Addressing and Subnetting
 
-OSPF was configured on the routers and Layer 3 switches to advertise routes between the different networks.
-
-The routers on each floor are connected through point-to-point networks using `/30` subnets.
-
-OSPF allows the different floors and VLAN networks to communicate with each other without manually configuring static routes for every network.
-
-![OSPF Verification](images/ospf-verification.png)
-
-### Routing Verification Commands
+The base network used for the departments is:
 
 ```text
-show ip route
-show ip ospf neighbor
-show ip protocols
-show ip interface brief
-```
-
----
-
-## DHCP Configuration
-
-A dedicated DHCP server was configured in the server room.
-
-The DHCP server provides IP addresses dynamically to devices across the different departments. DHCP relay configuration was used on the Layer 3 switches so that devices in different VLANs could reach the DHCP server.
-
-![DHCP Pool](images/dhcp-pool.png)
-
-### DHCP Verification
-
-I checked the DHCP configuration and verified that end devices were receiving IP addresses from the configured pools.
-
-The following checks were used during configuration:
-
-```text
-show ip dhcp binding
-show ip interface brief
-```
-
----
-
-## Wireless Network
-
-Each department has a wireless access point for users.
-
-The wireless networks were configured to provide connectivity for wireless devices along with the wired PCs and printers.
-
-The wireless setup was included as part of the department-level network design.
-
----
-
-## Inter-VLAN Routing
-
-Each department is placed in a separate VLAN and subnet.
-
-Inter-VLAN routing was configured on the Layer 3 switches to allow communication between the different departmental networks.
-
-The `ip helper-address` command was also used to forward DHCP requests from the VLANs to the dedicated DHCP server.
-
----
-
-## Port Security
-
-Port security was configured on the access switches to control which devices could connect to selected switch ports.
-
-Sticky MAC address learning was used to learn and secure the MAC addresses of connected devices.
-
-The violation mode was configured as `shutdown`.
-
-![Port Security Verification](images/port-security-verification.png)
-
-### Port Security Features
-
-- Sticky MAC address learning
-- MAC address security
-- Maximum secure MAC address limit
-- Shutdown violation mode
-
----
-
-## SSH Configuration
-
-SSH was configured on the routers for remote management.
-
-This allows the network devices to be accessed remotely instead of relying only on console access.
-
-![SSH Verification](images/ssh-verification.png)
-
-### SSH Configuration Features
-
-- Hostname configuration
-- Domain name configuration
-- Local username and password
-- VTY line configuration
-- SSH-only remote access
-
----
-
-## Connectivity Testing
-
-After configuring the VLANs, IP addressing, routing and DHCP, I tested communication between different parts of the network.
-
-The testing included:
-
-- Communication between devices in the same VLAN
-- Communication between different VLANs
-- Communication between different floors
-- Connectivity to the DHCP server
-- Connectivity to the HTTP server
-- Connectivity to the Email server
-- Testing of routed networks
-
-![Connectivity Test](images/connectivity-test.png)
-
----
-
-## Verification Images
-
-### VLAN Verification
-
-![VLAN Verification](images/vlan-verification.png)
-
-### IP Addressing
-
-![IP Addressing Verification](images/ip-addressing.png)
-
-### OSPF Verification
-
-![OSPF Verification](images/ospf-verification.png)
-
-### DHCP Pool
-
-![DHCP Pool Verification](images/dhcp-pool.png)
-
-### Port Security
-
-![Port Security Verification](images/port-security-verification.png)
-
-### SSH Verification
-
-![SSH Verification](images/ssh-verification.png)
-
----
-
-## Configuration Steps
-
-The main configuration steps I followed were:
-
-1. Basic configuration on the routers and switches.
-2. VLAN creation and department assignment.
-3. Configuration of access and trunk ports.
-4. Subnetting and IP address assignment.
-5. OSPF configuration on the routers and Layer 3 switches.
-6. Static IP configuration for the server room devices.
-7. DHCP server configuration.
-8. Inter-VLAN routing and DHCP relay configuration.
-9. Wireless network configuration.
-10. Port security configuration.
-11. SSH configuration on the routers.
-12. Connectivity testing and troubleshooting.
-
----
-
-## Commands Used for Verification
-
-Some of the Cisco IOS commands used during the project were:
-
-```text
-show vlan brief
-show ip route
-show ip ospf neighbor
-show ip protocols
-show ip interface brief
-show ip dhcp binding
-show ip dhcp pool
-show port-security
-show port-security interface
-```
-
-These commands helped me check the VLANs, routing tables, interfaces, DHCP configuration and port security settings.
-
----
-
-## What I Learned
-
-Through this project, I practiced:
-
-- Enterprise network design
-- Creating a network model using Microsoft Visio
-- VLAN configuration
-- IP subnetting
-- Layer 3 switching
-- Inter-VLAN routing
-- OSPF routing
-- DHCP server configuration
-- DHCP relay using `ip helper-address`
-- Wireless network configuration
-- Port security
-- SSH remote access
-- Server connectivity
-- Network troubleshooting
-
-This project helped me understand how multiple departments, floors and services can be connected together in a larger enterprise network.
-
----
-
-## Project Structure
-
-```text
-05-enterprise-banking-network/
-│
-├── images/
-│   ├── topology.png
-│   ├── ip-addressing.png
-│   ├── vlan-verification.png
-│   ├── ospf-verification.png
-│   ├── dhcp-pool.png
-│   ├── port-security-verification.png
-│   ├── ssh-verification.png
-│   ├── connectivity-test.png
-│   └── visio-network-design.png
-│
-├── enterprise-banking-network.pkt
-└── README.md
-```
-
----
-
-## Tools Used
-
-- Cisco Packet Tracer
-- Microsoft Visio
-- Cisco IOS CLI
-
----
-
-## Project Status
-
-**Completed**
-
-Designed and implemented a four-floor enterprise banking network in Cisco Packet Tracer. The project includes VLANs, subnetting, OSPF, DHCP, wireless networking, server connectivity, port security and SSH configuration.
-
+192.168.10.0
